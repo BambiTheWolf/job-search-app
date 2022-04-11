@@ -1,8 +1,9 @@
-const initialState = {
-  favourites: [],
-};
+import { initialState } from "../index";
 
-export default function mainReducer(state = initialState, action) {
+export default function favouritesReducer(
+  state = initialState.favourites,
+  action
+) {
   console.log(action, state);
 
   const { type, payload } = action;
@@ -11,12 +12,12 @@ export default function mainReducer(state = initialState, action) {
     case "ADD_TO_FAV":
       return {
         ...state,
-        favourites: [...state.favourites, payload],
+        elements: [...state.elements, payload],
       };
     case "REMOVE_FROM_FAV":
       return {
         ...state,
-        favourites: state.favourites.filter((company) => company !== payload),
+        elements: state.elements.filter((company) => company !== payload),
       };
     default:
       return state;

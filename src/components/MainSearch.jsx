@@ -3,8 +3,14 @@ import { Container, Row, Col, Form } from "react-bootstrap";
 import JobResult from "./JobResult";
 import uniqid from "uniqid";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { fetchJobs } from "../store/actions";
 
-export default class MainSearch extends React.Component {
+const mapDispatchToProps = (dispatch) => ({
+  fetchJobs: (baseEndpoint, query) => dispatch(fetchJobs(baseEndpoint, query)),
+});
+
+class MainSearch extends React.Component {
   state = {
     query: "",
     jobs: [],
@@ -18,19 +24,7 @@ export default class MainSearch extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-
-    const response = await fetch(
-      this.baseEndpoint + this.state.query + "&limit=20"
-    );
-
-    if (!response.ok) {
-      alert("Error fetching results");
-      return;
-    }
-
-    const { data } = await response.json();
-
-    this.setState({ jobs: data });
+    this.props.fetchJobs(this.baseEndpoint, this.state.query);
   };
 
   render() {
@@ -54,7 +48,7 @@ export default class MainSearch extends React.Component {
             </Form>
           </Col>
           <Col xs={10} className="mx-auto mb-5">
-            {this.state.jobs.map((jobData) => (
+            {this.props.jobs.elements.map((jobData) => (
               <JobResult key={uniqid()} data={jobData} />
             ))}
           </Col>
@@ -63,3 +57,5 @@ export default class MainSearch extends React.Component {
     );
   }
 }
+
+export default connect((s) => s, mapDispatchToProps)(MainSearch);

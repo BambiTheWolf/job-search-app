@@ -3,28 +3,18 @@ import { Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Star, StarFill } from "react-bootstrap-icons";
 import { addToFav, removeFromFav } from "../store/actions";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-const mapStateToProps = (s) => s;
+function JobResult({ data }) {
+  const favourites = useSelector((state) => state.favourites);
+  const dispatch = useDispatch();
 
-const mapDispatchToProps = (dispatch) => ({
-  addToFavourites: (company) => dispatch(addToFav(company)),
-  removeFromFavourites: (company) => dispatch(removeFromFav(company)),
-});
-
-function JobResult({
-  data,
-  favourites,
-  addToFavourites,
-  removeFromFavourites,
-}) {
-  const isFav = favourites.includes(data.company_name);
-  console.log(isFav, favourites);
-  const toggleFavourite = () => {
-    isFav
-      ? removeFromFavourites(data.company_name)
-      : addToFavourites(data.company_name);
-  };
+  const isFav = favourites.elements.includes(data.company_name);
+  // const toggleFavourite = () => {
+  //   isFav
+  //     ? dispatch(addToFav(data.company_name))
+  //     : dispatch(removeFromFav(data.company_name));
+  // };
 
   return (
     <Row
@@ -37,14 +27,18 @@ function JobResult({
             color="gold"
             size={16}
             className="me-4 my-auto"
-            onClick={toggleFavourite}
+            onClick={() => {
+              dispatch(addToFav(data.company_name));
+            }}
           />
         ) : (
           <Star
             color="gold"
             size={16}
             className="me-4 my-auto"
-            onClick={toggleFavourite}
+            onClick={() => {
+              dispatch(removeFromFav(data.company_name));
+            }}
           />
         )}
         <Link to={`/${data.company_name}`}>{data.company_name}</Link>
@@ -58,4 +52,4 @@ function JobResult({
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JobResult);
+export default JobResult;
