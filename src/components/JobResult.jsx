@@ -10,11 +10,11 @@ function JobResult({ data }) {
   const dispatch = useDispatch();
 
   const isFav = favourites.elements.includes(data.company_name);
-  // const toggleFavourite = () => {
-  //   isFav
-  //     ? dispatch(addToFav(data.company_name))
-  //     : dispatch(removeFromFav(data.company_name));
-  // };
+  const toggleFavourite = () => {
+    isFav
+      ? dispatch(removeFromFav(data.company_name))
+      : dispatch(addToFav(data.company_name));
+  };
 
   return (
     <Row
@@ -27,18 +27,14 @@ function JobResult({ data }) {
             color="gold"
             size={16}
             className="me-4 my-auto"
-            onClick={() => {
-              dispatch(addToFav(data.company_name));
-            }}
+            onClick={toggleFavourite}
           />
         ) : (
           <Star
             color="gold"
             size={16}
             className="me-4 my-auto"
-            onClick={() => {
-              dispatch(removeFromFav(data.company_name));
-            }}
+            onClick={toggleFavourite}
           />
         )}
         <Link to={`/${data.company_name}`}>{data.company_name}</Link>
