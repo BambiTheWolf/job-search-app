@@ -13,8 +13,8 @@ const Favourites = () => {
       <Row>
         <Col xs={12}>
           <ListGroup>
-            {state.favourites.elements.map((f) => (
-              <ListGroupItem>
+            {state.favourites.elements.map((f, i) => (
+              <ListGroupItem key={`fav-lgi-${i}`}>
                 <StarFill
                   onClick={() => {
                     dispatch(removeFromFav(f));
